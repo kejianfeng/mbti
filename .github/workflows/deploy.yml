@@ -1,0 +1,63 @@
+name: 构建和部署
+
+on:
+  push:
+    branches: [ main ]  # 当推送到main分支时触发
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+    
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # 使用Node.js 16
+        cache: 'npm'
+    
+    - name: 安装依赖
+      run: npm ci
+    
+    - name: 构建项目
+      run: npm run build
+      
+    - name: 导出静态文件
+      run: npm run export || echo "Export command not found, skipping"
+      continue-on-error: true
+    
+    - name: 设置SSH密钥
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+    - name: 添加服务器到已知主机
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+    
+    - name: 部署到服务器
+      run: |
+        # 如果使用了export命令，部署out目录；否则部署.next目录
+        if [ -d "out" ]; then
+          rsync -avz --delete out/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/data/mbti-app/
+        else
+          # 创建部署包
+          tar -czf deploy.tar.gz .next public package.json package-lock.json next.config.js
+          # 传输到服务器
+          scp deploy.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/tmp/
+          # 在服务器上解压并安装
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            mkdir -p /data/mbti-app
+            cd /data/mbti-app
+            tar -xzf /tmp/deploy.tar.gz
+            npm ci --production
+            pm2 restart mbti-app || pm2 start npm --name "mbti-app" -- start
+            rm /tmp/deploy.tar.gz
+          EOF
+        fi
+    
+    - name: 部署完成通知
+      run: echo "部署已完成！" 
