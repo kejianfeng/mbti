@@ -1,0 +1,153 @@
+.detail-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.detail-type {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.detail-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--neutral-300);
+}
+
+.detail-tab {
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: 0 var(--spacing-sm);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.detail-tab:hover {
+    color: var(--primary-color);
+}
+
+.detail-tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.detail-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.detail-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+.trait-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.trait-item {
+    display: flex;
+    align-items: flex-start;
+}
+
+.trait-icon {
+    margin-right: var(--spacing-sm);
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.career-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.career-item {
+    background-color: var(--neutral-100);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+}
+
+.famous-people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.famous-person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.famous-person img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: var(--spacing-sm);
+}
+
+.famous-person span {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.compatibility-section {
+    margin-top: var(--spacing-xl);
+}
+
+.compatibility-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.compatibility-card {
+    border: 1px solid var(--neutral-300);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+}
+
+.compatibility-card h4 {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+}
+
+.compatibility-card h4 span {
+    margin-left: var(--spacing-sm);
+}
+
+.development-tips {
+    margin-top: var(--spacing-xl);
+}
+
+.tip-item {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+    position: relative;
+}
+
+.tip-item::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .trait-list,
+    .career-grid,
+    .compatibility-grid {
+        grid-template-columns: 1fr;
+    }
+} 

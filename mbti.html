@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI人格测试</title>
+    <style>
+        /* 全局变量 */
+        :root {
+            /* 主色调 */
+            --primary-color: #5e72e4;
+            --primary-light: #8f9ff3;
+            --primary-dark: #324cdd;
+            
+            /* 辅助色 */
+            --secondary-color: #8965e0;
+            --secondary-light: #a88ee8;
+            --secondary-dark: #6943d1;
+            
+            /* 中性色 */
+            --neutral-100: #f8f9fa;
+            --neutral-200: #e9ecef;
+            --neutral-300: #dee2e6;
+            --neutral-400: #ced4da;
+            --neutral-500: #adb5bd;
+            --neutral-600: #6c757d;
+            --neutral-700: #495057;
+            --neutral-800: #343a40;
+            --neutral-900: #212529;
+            
+            /* MBTI类型颜色 */
+            --color-analyst: #5e72e4;  /* 分析家族群 (NT) */
+            --color-diplomat: #8965e0;  /* 外交家族群 (NF) */
+            --color-sentinel: #11cdef;  /* 哨兵家族群 (SJ) */
+            --color-explorer: #ffd600;  /* 探险家族群 (SP) */
+            
+            /* 字体 */
+            --font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            
+            /* 间距 */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-xxl: 3rem;
+            
+            /* 圆角 */
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+            
+            /* 阴影 */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--neutral-800);
+            background-color: var(--neutral-100);
+            padding: var(--spacing-md);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: var(--spacing-md);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--neutral-900);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+        
+        h3 {
+            font-size: 1.75rem;
+        }
+        
+        h4 {
+            font-size: 1.5rem;
+        }
+        
+        h5 {
+            font-size: 1.25rem;
+        }
+        
+        h6 {
+            font-size: 1rem;
+        }
+        
+        p {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        /* 通用容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+        
+        /* 界面容器 */
+        .screen {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xxl);
+            position: relative;
+        }
+        
+        .screen-title {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: var(--spacing-md);
+        }
+        
+        .screen-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-light);
+            border-radius: 3px;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: var(--border-radius-md);
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            color: white;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            color: white;
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+        }
+        
+        .btn-outline {
+            color: var(--primary-color);
+            background-color: transparent;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            color: white;
+            background-color: var(--primary-color);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* 弹性布局工具 */
+        .d-flex {
+            display: flex;
+        }
+        
+        .flex-column {
+            flex-direction: column;
+        }
+        
+        .justify-content-center {
+            justify-content: center;
+        }
+        
+        .justify-content-between {
+            justify-content: space-between;
+        }
+        
+        .align-items-center {
+            align-items: center;
+        }
+        
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        
+        /* 间距工具 */
+        .mt-1 { margin-top: var(--spacing-xs); }
+        .mt-2 { margin-top: var(--spacing-sm); }
+        .mt-3 { margin-top: var(--spacing-md); }
+        .mt-4 { margin-top: var(--spacing-lg); }
+        .mt-5 { margin-top: var(--spacing-xl); }
+        
+        .mb-1 { margin-bottom: var(--spacing-xs); }
+        .mb-2 { margin-bottom: var(--spacing-sm); }
+        .mb-3 { margin-bottom: var(--spacing-md); }
+        .mb-4 { margin-bottom: var(--spacing-lg); }
+        .mb-5 { margin-bottom: var(--spacing-xl); }
+        
+        .mx-auto { 
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* 响应式工具 */
+        @media (max-width: 768px) {
+            .screen {
+                padding: var(--spacing-lg);
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* 首页特定样式 */
+        .welcome-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .welcome-header img {
+            max-width: 150px;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .feature-box i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .feature-box h4 {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .mbti-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .mbti-type {
+            text-align: center;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            font-weight: bold;
+            color: white;
+        }
+        
+        .mbti-type.analyst {
+            background-color: var(--color-analyst);
+        }
+        
+        .mbti-type.diplomat {
+            background-color: var(--color-diplomat);
+        }
+        
+        .mbti-type.sentinel {
+            background-color: var(--color-sentinel);
+        }
+        
+        .mbti-type.explorer {
+            background-color: var(--color-explorer);
+        }
+        
+        .cta-container {
+            text-align: center;
+            margin: var(--spacing-xxl) 0 var(--spacing-xl);
+        }
+        
+        .login-register {
+            margin-top: var(--spacing-xl);
+            text-align: center;
+        }
+        
+        .login-register a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 var(--spacing-sm);
+            font-weight: 600;
+        }
+        
+        .login-register a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .mbti-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-5">MBTI人格测试应用原型</h1>
+        
+        <!-- 欢迎页/首页 -->
+        <section id="welcome-screen" class="screen">
+            <h2 class="screen-title">探索你的MBTI人格类型</h2>
+            
+            <div class="welcome-header">
+                <img src="https://via.placeholder.com/150?text=MBTI" alt="MBTI Logo">
+                <h3>了解自己，发现潜能</h3>
+                <p class="mb-4">MBTI人格测试是一种流行的心理学工具，帮助你了解自己的思考方式、行为模式和与他人互动的方式。</p>
+            </div>
+            
+            <div class="d-flex flex-wrap justify-content-between">
+                <div class="feature-box" style="flex: 1; min-width: 250px;">
+                    <i>🧠</i>
+                    <h4>科学的测评方法</h4>
+                    <p>基于荣格心理学理论，通过60个精心设计的问题，准确评估你的人格类型。</p>
+                </div>
+                
+                <div class="feature-box" style="flex: 1; min-width: 250px;">
+                    <i>🔍</i>
+                    <h4>深入的类型解析</h4>
+                    <p>获取详细的人格特质分析，了解你的优势、挑战和潜在发展方向。</p>
+                </div>
+                
+                <div class="feature-box" style="flex: 1; min-width: 250px;">
+                    <i>💼</i>
+                    <h4>职业发展指导</h4>
+                    <p>发现最适合你人格类型的职业方向，让你的工作更符合天性。</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5 mb-5">
+                <h4>MBTI将人格分为16种类型，基于四个维度：</h4>
+                <div class="d-flex flex-wrap justify-content-center mt-4">
+                    <div style="flex: 1; min-width: 200px; padding: 0 var(--spacing-md);">
+                        <h5>能量来源</h5>
+                        <p><strong>E</strong>xtroversion (外向) vs <strong>I</strong>ntroversion (内向)</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 0 var(--spacing-md);">
+                        <h5>信息获取</h5>
+                        <p><strong>S</strong>ensing (实感) vs i<strong>N</strong>tuition (直觉)</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 0 var(--spacing-md);">
+                        <h5>决策方式</h5>
+                        <p><strong>T</strong>hinking (思考) vs <strong>F</strong>eeling (情感)</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 0 var(--spacing-md);">
+                        <h5>生活方式</h5>
+                        <p><strong>J</strong>udging (判断) vs <strong>P</strong>erceiving (感知)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mbti-grid">
+                <!-- 分析家族群 (NT) -->
+                <div class="mbti-type analyst">INTJ</div>
+                <div class="mbti-type analyst">INTP</div>
+                <div class="mbti-type analyst">ENTJ</div>
+                <div class="mbti-type analyst">ENTP</div>
+                
+                <!-- 外交家族群 (NF) -->
+                <div class="mbti-type diplomat">INFJ</div>
+                <div class="mbti-type diplomat">INFP</div>
+                <div class="mbti-type diplomat">ENFJ</div>
+                <div class="mbti-type diplomat">ENFP</div>
+                
+                <!-- 哨兵家族群 (SJ) -->
+                <div class="mbti-type sentinel">ISTJ</div>
+                <div class="mbti-type sentinel">ISFJ</div>
+                <div class="mbti-type sentinel">ESTJ</div>
+                <div class="mbti-type sentinel">ESFJ</div>
+                
+                <!-- 探险家族群 (SP) -->
+                <div class="mbti-type explorer">ISTP</div>
+                <div class="mbti-type explorer">ISFP</div>
+                <div class="mbti-type explorer">ESTP</div>
+                <div class="mbti-type explorer">ESFP</div>
+            </div>
+            
+            <div class="cta-container">
+                <a href="#" class="btn btn-primary btn-lg">开始测试</a>
+                <p class="mt-3">大约需要15-20分钟完成</p>
+            </div>
+            
+            <div class="login-register">
+                <p>已有账号？<a href="#">登录</a> 或 <a href="#">注册</a> 以保存您的测试结果</p>
+            </div>
+        </section>
+        
+        <!-- 测试问题页 -->
+        <section id="question-screen" class="screen">
+            <h2 class="screen-title">MBTI人格测试</h2>
+            
+            <div class="progress-container mb-4">
+                <div class="progress" style="height: 8px; background-color: var(--neutral-200); border-radius: 4px; overflow: hidden;">
+                    <div class="progress-bar" style="width: 20%; height: 100%; background-color: var(--primary-color);"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <span>问题 12/60</span>
+                    <span>20% 完成</span>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-card card">
+                    <h4 class="question-text mb-4">12. 在社交场合中，你通常会：</h4>
+                    
+                    <div class="options-container">
+                        <div class="option-item d-flex align-items-center mb-3">
+                            <input type="radio" id="option1" name="question12" value="1" class="mr-3">
+                            <label for="option1" class="option-label d-flex align-items-center" style="cursor: pointer; padding: 10px 15px; border-radius: var(--border-radius-md); border: 1px solid var(--neutral-300); width: 100%;">
+                                <span class="option-radio" style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); margin-right: 15px; position: relative;">
+                                    <span class="option-radio-inner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-color);"></span>
+                                </span>
+                                <span>非常同意 - 我主动与许多人交谈，扩展社交圈</span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item d-flex align-items-center mb-3">
+                            <input type="radio" id="option2" name="question12" value="2" class="mr-3">
+                            <label for="option2" class="option-label d-flex align-items-center" style="cursor: pointer; padding: 10px 15px; border-radius: var(--border-radius-md); border: 1px solid var(--neutral-300); width: 100%;">
+                                <span class="option-radio" style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); margin-right: 15px; position: relative;">
+                                    <span class="option-radio-inner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-color);"></span>
+                                </span>
+                                <span>部分同意 - 我倾向于积极参与社交活动</span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item d-flex align-items-center mb-3">
+                            <input type="radio" id="option3" name="question12" value="3" class="mr-3">
+                            <label for="option3" class="option-label d-flex align-items-center" style="cursor: pointer; padding: 10px 15px; border-radius: var(--border-radius-md); border: 1px solid var(--neutral-300); width: 100%;">
+                                <span class="option-radio" style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); margin-right: 15px; position: relative;">
+                                    <span class="option-radio-inner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-color);"></span>
+                                </span>
+                                <span>中立 - 视情况而定，有时积极参与，有时保持安静</span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item d-flex align-items-center mb-3">
+                            <input type="radio" id="option4" name="question12" value="4" class="mr-3">
+                            <label for="option4" class="option-label d-flex align-items-center" style="cursor: pointer; padding: 10px 15px; border-radius: var(--border-radius-md); border: 1px solid var(--neutral-300); width: 100%;">
+                                <span class="option-radio" style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); margin-right: 15px; position: relative;">
+                                    <span class="option-radio-inner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-color);"></span>
+                                </span>
+                                <span>部分不同意 - 我倾向于与少数熟悉的人交流</span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item d-flex align-items-center">
+                            <input type="radio" id="option5" name="question12" value="5" class="mr-3">
+                            <label for="option5" class="option-label d-flex align-items-center" style="cursor: pointer; padding: 10px 15px; border-radius: var(--border-radius-md); border: 1px solid var(--neutral-300); width: 100%;">
+                                <span class="option-radio" style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); margin-right: 15px; position: relative;">
+                                    <span class="option-radio-inner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary-color);"></span>
+                                </span>
+                                <span>非常不同意 - 我更喜欢安静地观察，避免太多社交互动</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons d-flex justify-content-between mt-5">
+                <button class="btn btn-outline">上一题</button>
+                <button class="btn btn-primary">下一题</button>
+            </div>
+            
+            <div class="test-info mt-5">
+                <div class="card" style="background-color: var(--neutral-100);">
+                    <h5>测试提示</h5>
+                    <ul style="padding-left: 20px;">
+                        <li>请根据你在大多数情况下的真实想法和行为来回答</li>
+                        <li>没有对错之分，选择最符合你自己的选项</li>
+                        <li>不要过度思考每个问题，通常第一反应最能反映真实的你</li>
+                        <li>你可以随时暂停测试，系统会保存你的进度</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 结果页 -->
+        <section id="result-screen" class="screen">
+            <h2 class="screen-title">你的MBTI测试结果</h2>
+            
+            <div class="result-container text-center">
+                <div class="result-type-container mb-5">
+                    <h1 class="result-type" style="font-size: 4rem; color: var(--color-diplomat); margin-bottom: 0.5rem;">INFJ</h1>
+                    <h3 class="result-type-name">提倡者 (The Advocate)</h3>
+                    <p class="result-type-description mb-4">理想主义、有原则的思想家，具有强烈的个人诚信感和追求帮助他人的动力。</p>
+                    <div class="result-actions mt-4">
+                        <a href="#" class="btn btn-primary">查看详细解析</a>
+                        <a href="#" class="btn btn-outline ml-3" style="margin-left: 10px;">保存结果</a>
+                    </div>
+                </div>
+                
+                <div class="dimensions-container mt-5">
+                    <h4 class="mb-4">你的四个维度偏好</h4>
+                    
+                    <div class="dimension-item mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><strong>I</strong>ntroversion (内向)</span>
+                            <span>67%</span>
+                            <span><strong>E</strong>xtroversion (外向)</span>
+                        </div>
+                        <div class="dimension-bar" style="height: 20px; background-color: var(--neutral-200); border-radius: 10px; position: relative;">
+                            <div class="dimension-progress" style="position: absolute; left: 0; top: 0; height: 100%; width: 67%; background-color: var(--primary-color); border-radius: 10px;"></div>
+                            <div class="dimension-midpoint" style="position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background-color: var(--neutral-400);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension-item mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>i<strong>N</strong>tuition (直觉)</span>
+                            <span>82%</span>
+                            <span><strong>S</strong>ensing (实感)</span>
+                        </div>
+                        <div class="dimension-bar" style="height: 20px; background-color: var(--neutral-200); border-radius: 10px; position: relative;">
+                            <div class="dimension-progress" style="position: absolute; left: 0; top: 0; height: 100%; width: 82%; background-color: var(--secondary-color); border-radius: 10px;"></div>
+                            <div class="dimension-midpoint" style="position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background-color: var(--neutral-400);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension-item mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><strong>F</strong>eeling (情感)</span>
+                            <span>59%</span>
+                            <span><strong>T</strong>hinking (思考)</span>
+                        </div>
+                        <div class="dimension-bar" style="height: 20px; background-color: var(--neutral-200); border-radius: 10px; position: relative;">
+                            <div class="dimension-progress" style="position: absolute; left: 0; top: 0; height: 100%; width: 59%; background-color: var(--color-diplomat); border-radius: 10px;"></div>
+                            <div class="dimension-midpoint" style="position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background-color: var(--neutral-400);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension-item mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><strong>J</strong>udging (判断)</span>
+                            <span>71%</span>
+                            <span><strong>P</strong>erceiving (感知)</span>
+                        </div>
+                        <div class="dimension-bar" style="height: 20px; background-color: var(--neutral-200); border-radius: 10px; position: relative;">
+                            <div class="dimension-progress" style="position: absolute; left: 0; top: 0; height: 100%; width: 71%; background-color: var(--color-sentinel); border-radius: 10px;"></div>
+                            <div class="dimension-midpoint" style="position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background-color: var(--neutral-400);"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-summary mt-5">
+                    <div class="card">
+                        <h4>INFJ简介</h4>
+                        <p>INFJ是16种人格类型中最稀有的类型，约占人口的1-2%。作为"提倡者"，你具有深刻的洞察力和直觉，能够看透表象理解人们的真实动机和需求。</p>
+                        <p>你的主要特质包括：</p>
+                        <ul style="text-align: left; padding-left: 20px;">
+                            <li>富有同情心和理解力，真诚关心他人福祉</li>
+                            <li>有强烈的个人价值观和道德准则</li>
+                            <li>能够轻松识别模式和潜在含义</li>
+                            <li>追求深度而非广度的人际关系</li>
+                            <li>具有创造性思维和独特的解决问题能力</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="share-results mt-5">
+                    <h5>分享你的结果</h5>
+                    <div class="social-buttons mt-3">
+                        <button class="btn btn-outline" style="margin: 0 5px;">
+                            <i>📱</i> 微信
+                        </button>
+                        <button class="btn btn-outline" style="margin: 0 5px;">
+                            <i>🔄</i> 微博
+                        </button>
+                        <button class="btn btn-outline" style="margin: 0 5px;">
+                            <i>📧</i> 邮件
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+    
+    <script>
+        // 简单的交互效果示例
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为选项标签添加点击事件
+            const optionLabels = document.querySelectorAll('.option-label');
+            
+            optionLabels.forEach(label => {
+                label.addEventListener('click', function() {
+                    // 获取关联的单选按钮
+                    const radioId = this.getAttribute('for');
+                    const radio = document.getElementById(radioId);
+                    
+                    // 选中单选按钮
+                    radio.checked = true;
+                    
+                    // 重置所有选项的样式
+                    optionLabels.forEach(l => {
+                        l.style.backgroundColor = '';
+                        l.style.borderColor = 'var(--neutral-300)';
+                        const innerRadio = l.querySelector('.option-radio-inner');
+                        if (innerRadio) {
+                            innerRadio.style.display = 'none';
+                        }
+                    });
+                    
+                    // 设置当前选中选项的样式
+                    this.style.backgroundColor = 'var(--neutral-200)';
+                    this.style.borderColor = 'var(--primary-color)';
+                    const innerRadio = this.querySelector('.option-radio-inner');
+                    if (innerRadio) {
+                        innerRadio.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

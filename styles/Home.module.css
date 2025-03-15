@@ -1,0 +1,84 @@
+/* 首页特定样式 */
+.welcome-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.welcome-header img {
+    max-width: 150px;
+    margin-bottom: var(--spacing-md);
+}
+
+.feature-box {
+    text-align: center;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.feature-box i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.feature-box h4 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mbti-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+}
+
+.mbti-type {
+    text-align: center;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    font-weight: bold;
+    color: white;
+}
+
+.mbti-type.analyst {
+    background-color: var(--color-analyst);
+}
+
+.mbti-type.diplomat {
+    background-color: var(--color-diplomat);
+}
+
+.mbti-type.sentinel {
+    background-color: var(--color-sentinel);
+}
+
+.mbti-type.explorer {
+    background-color: var(--color-explorer);
+}
+
+.cta-container {
+    text-align: center;
+    margin: var(--spacing-xxl) 0 var(--spacing-xl);
+}
+
+.login-register {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+}
+
+.login-register a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 var(--spacing-sm);
+    font-weight: 600;
+}
+
+.login-register a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .mbti-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+} 

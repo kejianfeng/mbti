@@ -1,0 +1,59 @@
+# 依赖
+/node_modules
+/.pnp
+.pnp.js
+
+# 测试
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# 生产环境构建
+/build
+
+# 其他
+.DS_Store
+*.pem
+
+# 调试
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 本地环境文件
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE相关
+.idea
+.vscode
+*.swp
+*.swo
+
+# 临时文件
+*.log
+*.tmp
+.tmp/
+tmp/
+
+# 操作系统生成的文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.directory
+
+# 包管理器锁定文件（可选，取决于您的团队策略）
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml 

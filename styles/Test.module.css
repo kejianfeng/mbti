@@ -1,0 +1,82 @@
+.progress-container {
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress {
+    height: 8px;
+    background-color: var(--neutral-200);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.question-container {
+    margin-bottom: var(--spacing-xl);
+}
+
+.question-text {
+    margin-bottom: var(--spacing-lg);
+}
+
+.option-item {
+    margin-bottom: var(--spacing-md);
+}
+
+.option-label {
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--neutral-300);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.option-label:hover {
+    background-color: var(--neutral-200);
+}
+
+.option-radio {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    margin-right: 15px;
+    position: relative;
+}
+
+.option-radio-inner {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-xl);
+}
+
+.test-info {
+    margin-top: var(--spacing-xl);
+}
+
+.test-info .card {
+    background-color: var(--neutral-100);
+}
+
+.test-info ul {
+    padding-left: 20px;
+} 
